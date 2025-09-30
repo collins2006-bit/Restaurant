@@ -1,5 +1,5 @@
 <script setup>
-const isloggedin =false
+const isloggedin =JSON.parse(localStorage.getItem( "isLoggedIn"));
 </script>
 
 <template>

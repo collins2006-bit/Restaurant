@@ -13,9 +13,10 @@ const Password = ref(null)
 function login(){
     try {
         //get user data
-        let user = JSON.parse(localStorage.getItem( "signUpData"));
+        let user = JSON.parse(localStorage.getItem( "SignupData"));
+       
         //check user details
-        if(email.value = user.email && password.value == user.password){
+        if(Email.value == user.Email && Password.value == user.Password){
             localStorage.setItem( "isLoggedIn", true );
             router.push('/')
 
@@ -59,7 +60,7 @@ function login(){
             <router-link to="/Signup">Signup</router-link>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="white" variant="elevated"@click="Login()">Login</v-btn>
+            <v-btn color="white" variant="elevated"@click="login()">Login</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>

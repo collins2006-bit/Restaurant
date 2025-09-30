@@ -1,43 +1,71 @@
 <script setup>
 
-import {useMenuStore} from '../stores/menu'
+import { useMenuStore } from '../stores/menu'
+import { ref } from 'vue'
 const menuStore = useMenuStore()
-const menuitem = menuStore.selectedMenuItem
+const menuItem = menuStore.selectedMenuItem
+
+const quantity = ref(null)
+
+function order(){
+    let existingOrder = JSON.parse(localStorage.getItem("order"))
+    if (existingOrder == null){
+        existingOrder=[]
+    }
+
+    let currentOrder ={
+        menuItem: menuItem,
+        quantity: quantity.value,
+        paymentStatus: false,
+        user: JSON.parse(localStorage.getItem("SignupData")).name
+    }
+
+    existingOrder.push(currentOrder)
+
+    try{
+        localStorage.setItem("order", JSON.stringify(existingOrder));
+    } catch (err) {
+        console.error('Order process failed', err)
+    }
+}
+
 </script>
 
 <template>
-  <v-container fluid class="d-flex fill-height">
-    <v-row>
-      <v-col md="6">
-         <v-card class="pa-6 rounded-lg" justify="center"><v-img :src="menuitem.image" cover height="500">
-         </v-img></v-card>
-      </v-col>
-      <v-col md="6">
-        <v-card class="pa-6 rounded-lg" justify="center">
-          <v-card-title>{{ menuitem.name }}</v-card-title>
-          <v-card-subtitle>{{ menuitem.price }}</v-card-subtitle>
-          <v-card-text>{{ menuitem.description }}</v-card-text>
-          <v-card-text>{{ Quantity }}<v-text-field></v-text-field></v-card-text>
-
-         <v-row>
-          <v-col md="2">Quantity</v-col>
-          <v-col md="4">
-            <v-number-input
-              control-variant="split"
-              density="compact"
-              :min="1"
-              :max="10">
-            </v-number-input>
-          
-          </v-col>
-         </v-row>
-          <v-card-actions>
-            <v-btn background-color="#03A9F4" >ORDER</v-btn>
-          </v-card-actions>
-        </v-card>
-        <v-card clss="pa-6 mt-3 rounded-lg">
-          <v-card-title>Reviews</v-card-title>
-            <v-rating
+    <v-container fluid class="d-flex fill-height">
+        <v-card-actions>
+            <v-btn to = "/menu"> ⬅ Back To Menu</v-btn>
+        </v-card-actions>
+        <v-row>
+            <v-col md="6">
+                <v-card class="pa-6 rounded-lg" justify="center">
+                    <v-img :src="menuItem.image" cover height="500"></v-img>
+                </v-card>
+            </v-col>
+            <v-col md="6">
+                <v-card class="pa-6 rounded-lg" justify="center">
+                    <v-card-title>{{ menuItem.name }}</v-card-title>
+                    <v-card-subtitle>{{ menuItem.price }}</v-card-subtitle>
+                    <v-card-text>{{ menuItem.longDescription }}</v-card-text>
+                    <v-row>
+                        <v-col md="2"><v-card-text> Quantity: </v-card-text></v-col>
+                        <v-col md="10">
+                            <v-number-input
+                                v-model="quantity"
+                                density="compact"
+                                :min="1"
+                                :max="10">
+                            </v-number-input>
+                        </v-col>
+                    </v-row>
+                    <v-card-actions>
+                        <v-btn color="#03A9F4" variant="elevated" @click="order()">Order</v-btn>
+                    </v-card-actions>
+                </v-card>
+                <v-card class="pa-6 mt-3 rounded-lg" justify="center">
+                    <v-row>
+                        <v-card-title>Reviews</v-card-title>
+                        <v-rating
                         hover 
                         :length="5" 
                         :size="40"
@@ -45,9 +73,9 @@ const menuitem = menuStore.selectedMenuItem
                         active-color="#03A9F4">
 
                         </v-rating>
-        </v-card>
-
-      </v-col>
-    </v-row>
-  </v-container>
-</template>    
+                    </v-row>
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
+</template>

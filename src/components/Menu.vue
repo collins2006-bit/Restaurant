@@ -10,7 +10,8 @@ const menu= menustore.menu
   function view(menu){
     menustore.updateSelectedMenuItem(menu)
     router.push('/menuitem')
-  }
+  }  
+
 </script>
  
 <template>
@@ -35,7 +36,7 @@ const menu= menustore.menu
               
               <v-card-actions>
                 <v-btn @click="view(item)">view</v-btn>
-                <v-btn>ORDER</v-btn>
+                <v-btn @click="Orders(ite)">ORDER</v-btn>
               </v-card-actions>
         </v-card>
       </v-col>
